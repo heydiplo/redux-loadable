@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["env", {
+      "targets": ["last 2 versions", "IE11"],
+      "loose": true,
+      "modules": "commonjs"
+    }],
+    "react",
+    "flow"
+  ],
+  "plugins": ["transform-object-rest-spread", "transform-class-properties"]
+}

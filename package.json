@@ -1,0 +1,33 @@
+{
+  "name": "redux-loadable",
+  "author": "Pavel Puzikov <my@inner.fish> (https://github.com/heydiplo)",
+  "homepage": "https://github.com/heydiplo/redux-loadable",
+  "repository": "github:heydiplo/redux-loadable",
+  "bugs": "https://github.com/heydiplo/redux-loadable/issues",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "test": "./node_modules/.bin/jest"
+  },
+  "dependencies": {
+    "lodash": "4",
+    "reselect": "3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^23.5.0"
+  },
+  "jest": {
+    "rootDir": "./",
+    "roots": ["<rootDir>/src"]
+  }
+}
