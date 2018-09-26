@@ -1,6 +1,6 @@
 // @flow
 import type { Action, PureAction, AsyncActionTypes, Query } from './types'
-import { reduce, map, get } from 'lodash'
+import { isArray, reduce, map, get } from 'lodash'
 import { createSelector } from 'reselect'
 import stableToJson from './stableToJson'
 
@@ -19,10 +19,20 @@ const defaultOptions = {
 
 // helpers
 
-const hashify = (dataArray, id) => reduce(dataArray, (result, entry) => ({
-  ...result,
+const hashifyOne = (entry, id) => ({
   [entry[id]]: entry
-}), {})
+})
+
+const hashify = (data, id) => (
+  isArray(data) ? (
+    reduce(data, (result, entry) => ({
+      ...result,
+      ...hashifyOne(entry, id)
+    }), {})
+  ) : (
+    hashifyOne(data, id)
+  )
+)
 
 const getKey = (query) => stableToJson(query) || 'default'
 
@@ -84,9 +94,15 @@ export const loadable = (load_action: AsyncActionTypes, _options: ?Options) => {
 
       if (typeof data === 'undefined') { throw new Error('no `data` in the response') }
 
+      const queryData = isArray(data) ? (
+        map(data, options.id)
+      ) : (
+        data[options.id]
+      )
+
       newLoadingState = {
         ...loadingState,
-        data: map(data, options.id),
+        data: queryData,
         error: null,
         loading: false,
         total: count
@@ -129,9 +145,15 @@ export const loadableSelector = (name: string) => createSelector(
     let result = get(state, ['queries', hash]) || initial
 
     if (result.data) {
+      const data = isArray(result.data) ? (
+        map(result.data, (id) => state.data[id])
+      ) : (
+        state.data[result.data]
+      )
+
       result = {
         ...result,
-        data: map(result.data, (id) => state.data[id])
+        data
       }
     }
 
@@ -139,16 +161,6 @@ export const loadableSelector = (name: string) => createSelector(
       ...result,
       total: result.total === undefined ? undefined : result.total,
       pages: result.total === undefined ? undefined : Math.ceil(result.total / query.per_page)
-    }
-  }
-)
-
-export const singularSelector = (name: string) => createSelector(
-  loadableSelector(name),
-  (result) => {
-    return {
-      ...result,
-      data: result.data ? result.data[0] : result.data
     }
   }
 )
