@@ -8,6 +8,7 @@ import stableToJson from './stableToJson'
 type Options = {
   id?: string,
   clearOn?: (PureAction) => bool,
+  getMeta?: (PureAction) => any,
   getQuery: (PureAction) => Query,
   getData: (PureAction) => any,
   getCount?: (PureAction) => number,
@@ -44,7 +45,9 @@ type State = {
     [string]: {
       data: ?((string|number)[]),
       loading: boolean,
-      error: ?any
+      error: ?any,
+      total: ?number,
+      meta?: any
     }
   }
 }
@@ -60,7 +63,7 @@ export const loadable = (load_action: AsyncActionTypes, _options: ?Options) => {
 
   return (base: Base) => (_state: State, action: PureAction): State => {
     const state = base(_state, action)
-    const { getQuery, getData, getCount, getError } = options
+    const { getQuery, getData, getCount, getError, getMeta } = options
 
     if (options.clearOn && options.clearOn(action)) {
       return {
@@ -106,6 +109,10 @@ export const loadable = (load_action: AsyncActionTypes, _options: ?Options) => {
         error: null,
         loading: false,
         total: count
+      }
+
+      if (getMeta) {
+        newLoadingState.meta = getMeta(action)
       }
 
       newData = {
@@ -160,7 +167,8 @@ export const loadableSelector = (name: string) => createSelector(
     return {
       ...result,
       total: result.total === undefined ? undefined : result.total,
-      pages: result.total === undefined ? undefined : Math.ceil(result.total / query.per_page)
+      pages: result.total === undefined ? undefined : Math.ceil(result.total / query.per_page),
+      meta: result.meta
     }
   }
 )
