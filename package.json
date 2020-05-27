@@ -4,7 +4,7 @@
   "homepage": "https://github.com/heydiplo/redux-loadable",
   "repository": "github:heydiplo/redux-loadable",
   "bugs": "https://github.com/heydiplo/redux-loadable/issues",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "lib/index.js",

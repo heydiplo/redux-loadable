@@ -24,7 +24,7 @@ const hashifyOne = (entry, id) => ({
   [entry[id]]: entry
 })
 
-const hashify = (data, id) => (
+export const dataToSet = (data, id) => (
   isArray(data) ? (
     reduce(data, (result, entry) => ({
       ...result,
@@ -35,11 +35,11 @@ const hashify = (data, id) => (
   )
 )
 
-const getKey = (query) => stableToJson(query) || 'default'
+export const queryToKey = (query: Query) => stableToJson(query) || 'default'
 
 // state
 
-type State = {
+export type State = {
   data?: { [string]: any },
   queries?: {
     [string]: {
@@ -72,7 +72,7 @@ export const loadable = (load_action: AsyncActionTypes, _options: ?Options) => {
       }
     }
 
-    const queryKey = getKey(getQuery(action))
+    const queryKey = queryToKey(getQuery(action))
     const loadingState = get(state, ['queries', queryKey])
 
     let newLoadingState = loadingState || initial
@@ -117,7 +117,7 @@ export const loadable = (load_action: AsyncActionTypes, _options: ?Options) => {
 
       newData = {
         ...newData,
-        ...hashify(data, options.id)
+        ...dataToSet(data, options.id)
       }
     } else if (!state.data) {
       return {
@@ -148,7 +148,7 @@ export const loadableSelector = (name: string) => createSelector(
     (_, query) => query,
   ],
   (state, query) => {
-    const hash = getKey(query)
+    const hash = queryToKey(query)
     let result = get(state, ['queries', hash]) || initial
 
     if (result.data) {
