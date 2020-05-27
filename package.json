@@ -4,7 +4,7 @@
   "homepage": "https://github.com/heydiplo/redux-loadable",
   "repository": "github:heydiplo/redux-loadable",
   "bugs": "https://github.com/heydiplo/redux-loadable/issues",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -12,10 +12,7 @@
     "build": "babel src --out-dir lib",
     "test": "./node_modules/.bin/jest"
   },
-  "dependencies": {
-    "lodash": "4",
-    "reselect": "3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
@@ -24,10 +21,16 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
-    "jest": "^23.5.0"
+    "jest": "^26.0.1"
   },
   "jest": {
     "rootDir": "./",
-    "roots": ["<rootDir>/src"]
+    "roots": [
+      "<rootDir>/src"
+    ]
+  },
+  "peerDependencies": {
+    "lodash": "4",
+    "reselect": "4"
   }
 }
